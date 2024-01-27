@@ -62,7 +62,7 @@ nixpkgs = {
 };
 
   # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
+  #time.timeZone = "Europe/Amsterdam";
 
   # Select internationalisation properties.
   # i18n.defaultLocale = "en_US.UTF-8";
@@ -120,22 +120,26 @@ nixpkgs = {
 		grimblast
 		unar
 
-		libsForQt5.dolphin
+		#libsForQt5.dolphin
 		libreoffice
-		fcitx5
-		libpinyin
-		ibus
-		ibus-engines.libpinyin
+		#fcitx5-gtk
+		#fcitx5
+		#libpinyin
+		#ibus
+		#ibus-engines.libpinyin
 
 		thunderbird
 		vlc
 		firefox
-		#ungoogled-chromium
+		ungoogled-chromium
+
 		busybox
 		openssh
 		file
 		git
+		github-desktop
 		python3
+		gcc
 		neofetch
 		transmission_4-qt
 		teams-for-linux
@@ -145,6 +149,13 @@ nixpkgs = {
 		obsidian
 		steam
 		discord
+		#obs-studio
+		freecad
+		cura
+		#davinci-resolve
+		#blender #cuda, nvidia?
+		#blender-hip #AMD
+		inkscape-with-extensions
 		
 
 		#hyprland related
@@ -158,41 +169,45 @@ nixpkgs = {
 		libnotify
 		swww
 		rofi-wayland
-		rofi-screenshot
+		#rofi-screenshot
 		networkmanagerapplet
 		brightnessctl
 		sassc
+		swaylock
+		swayidle
 		#end hyprland related
 	   ];
 
 	   sessionVariables = {
+		#prompt rice baby
+		#PS1="\[\033[1;31m\]\A\[\033[0m\]  \[\033[1;33m\]\u@\h\[\033[0m\]  \[\033[1;36m\]<\w>\[\033[0m\]$ ";
 		#for if cursor becomes invisible
 		   WLR_NO_HARDWARE_CURSORS = "1";
 		#for electron apps
 		   NIXOS_OZONE_WL = "1";
+		 INPUT_METHOD = "fcitx";
+		 GTK_IM_MODULE = "fcitx";
+		 XMODIFIERS = "@im=fcitx";
+		 QT_IM_MODULE = "fcitx";
+		 #XIM_SERVERS=fcitx;
 	   };
 
    };
 
 i18n = {
 	inputMethod = {
-#		enabled = "fcitx5";
 #		#fcitx5.addons = with pkgs; [ 
 #			#fcitx5-chinese-addons 
 #			#fcitx5-rime
 #		#];
 #
-#		fcitx5.addons = builtins.attrValues {
-#			inherit (pkgs) fcitx5-chinese-addons;
-#		};
+		enabled = "fcitx5";
+		fcitx5.addons = builtins.attrValues {
+			inherit (pkgs) fcitx5-chinese-addons;
+		};
   	
-		enabled = "ibus";
-		ibus.engines = with pkgs.ibus-engines; [
-			libpinyin
-			rime
-			table
-			table-others
-		];
+		#enabled = "ibus";
+		#ibus.engines = with pkgs.ibus-engines; [ libpinyin ];
 	};
 
 	#defaultLocale = "zh_CN.UTF-8";
@@ -204,12 +219,12 @@ fonts = {
 		nerdfonts
 		font-awesome
 		google-fonts
-		noto-fonts
-		source-han-sans
-		source-han-serif
-		source-code-pro
-		hack-font
-		jetbrains-mono
+		#noto-fonts
+		#source-han-sans
+		#source-han-serif
+		#source-code-pro
+		#hack-font
+		#jetbrains-mono
 	];
 
 	fontconfig = {
@@ -264,6 +279,16 @@ programs = {
 
 	waybar.enable = true;
 
+	thunar = {
+		enable = true;
+		plugins = with pkgs.xfce; [
+			thunar-archive-plugin
+			thunar-volman
+		];
+	};
+
+	sway.enable = true;
+
 };
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -282,6 +307,7 @@ programs = {
 	  polkit = {
 		  enable = true;
 	  };
+	  pam.services.waylock = {};
   };
 services = {
 	openssh.enable = true;
@@ -303,6 +329,9 @@ services = {
 	  libinput.enable = true;
 	  #videoDrivers = [ "nvidia" ];
 	};
+	gvfs.enable = true; #mount, trash, etc. for thunar
+	tumbler.enable = true; #image thumbnails for thunar
+	automatic-timezoned.enable = true;
 };
    #virtualisation = {
 	   #virtualbox = {
